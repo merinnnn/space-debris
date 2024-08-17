@@ -4,8 +4,9 @@ import pygame as pg
 
 
 class BaseModel:
-    def __init__(self, app, vao_name, tex_id):
+    def __init__(self, app, vao_name, tex_id, pos=(0, 0, 0)):
         self.app = app
+        self.pos = pos
         self.m_model = self.get_model_matrix()
         self.tex_id = tex_id
         self.vao = app.mesh.vao.vaos[vao_name]
@@ -16,6 +17,8 @@ class BaseModel:
 
     def get_model_matrix(self):
         m_model = glm.mat4()
+        #translate
+        m_model = glm.translate(m_model, self.pos)
         return m_model
     
     def render(self):
@@ -35,8 +38,8 @@ class Cube(BaseModel):
     #     self.texture = self.get_texture(path='textures/metallic-textured-background.jpg')
     #     self.on_init()
 
-    def __init__(self, app, vao_name='cube', tex_id=0):
-        super().__init__(app, vao_name, tex_id)
+    def __init__(self, app, vao_name='cube', tex_id=0, pos=(0, 0, 0)):
+        super().__init__(app, vao_name, tex_id, pos)
         self.on_init()
 
     # def get_texture(self, path):
@@ -48,7 +51,7 @@ class Cube(BaseModel):
 
     def update(self):
         # m_model = glm.rotate(self.m_model, self.app.time, glm.vec3(0, 1, 0))
-        # self.shader_program['m_model'].write(m_model)
+        # self.program['m_model'].write(m_model)
         self.texture.use()
         self.program['camPos'].write(self.camera.position)
         self.program['m_view'].write(self.camera.m_view)
