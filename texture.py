@@ -7,6 +7,7 @@ class Texture:
         self.ctx = ctx
         self.textures = {}
         self.textures[0] = self.get_texture(path='textures/metallic-textured-background.jpg')
+        self.textures['earth'] = self.get_texture(path='objects/earth/Textures/Diffuse_2K.png')
 
     def get_texture(self, path):
         texture = pg.image.load(path).convert()

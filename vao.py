@@ -14,6 +14,12 @@ class VAO:
             vbo = self.vbo.vbos['cube']
         )
 
+        #earth vao
+        self.vaos['earth'] = self.get_vao(
+            program=self.program.programs['default'],
+            vbo = self.vbo.vbos['earth']
+        )
+
     def get_vao(self, program, vbo):
         vao = self.ctx.vertex_array(program, [(vbo.vbo, vbo.format, *vbo.attribs)])
         return vao
