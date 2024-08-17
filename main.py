@@ -2,7 +2,7 @@ import pygame as pg
 import moderngl as mgl
 import numpy as np
 import sys
-from model import Triangle
+from model import *
 from camera import Camera
 
 class GraphicsEngine:
@@ -18,14 +18,19 @@ class GraphicsEngine:
         pg.display.gl_set_attribute(pg.GL_CONTEXT_PROFILE_MASK, pg.GL_CONTEXT_PROFILE_CORE)
         #create opengl context
         pg.display.set_mode(self.WIN_SIZE, flags=pg.OPENGL | pg.DOUBLEBUF)
+        #mose settings
+        pg.event.set_grab(True)
+        pg.mouse.set_visible(False)
         #detect and use existing opengl context 
         self.ctx = mgl.create_context()
         #create an object to help track time 
         self.clock = pg.time.Clock()
+        self.time = 0
+        self.delta_time = 0
         #camera
         self.camera = Camera(self)
         #scene
-        self.scene = Triangle(self)
+        self.scene = Cube(self)
 
     def check_events(self):
         for event in pg.event.get():
@@ -42,11 +47,16 @@ class GraphicsEngine:
         #swap buffers
         pg.display.flip()
 
+    def get_time(self):
+        self.time = pg.time.get_ticks() * 0.001
+
     def run(self):
         while True:
+            self.get_time()
             self.check_events()
+            self.camera.update()
             self.render()
-            self.clock.tick(60)
+            self.delta_time = self.clock.tick(60)
 
 
 
