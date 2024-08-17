@@ -1,4 +1,3 @@
-# test_import.py
-from model import Triangle
+import sys
+print(sys.path)
 
-print("Triangle imported successfully")
