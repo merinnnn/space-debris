@@ -7,7 +7,7 @@ from sgp4.api import jday
 
 
 # Load the CSV file
-file_path = 'prototype-1\space_decay.csv'
+file_path = 'data\space_decay.csv'
 data = pd.read_csv(file_path)
 
 # Extract TLE data from the CSV
