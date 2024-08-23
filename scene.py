@@ -85,11 +85,8 @@ class Scene:
 
         satellites = [Sat(norad_id) for norad_id in norad_ids]
         for satellite in satellites:
-            print (satellite.get_position_vector())
-            try:
-                add(Cube(app, pos=(satellite.get_position_vector())))
-            except Exception as e:
-                print(f"Error calculating position for NORAD ID {satellite.norad_id}: {e}")
+            print (satellite.get_position_cartesian())
+            add(Cube(app, pos=(satellite.get_position_cartesian())))
 
 
         # for norad_id in norad_ids:
