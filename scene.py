@@ -6,6 +6,7 @@ from skyfield.api import Topos, load
 from skyfield.sgp4lib import EarthSatellite
 from model import *
 from sat import Sat
+from satel import Satel
 
 
 class Scene:
@@ -71,28 +72,63 @@ class Scene:
         #         add(Cube(app, pos=(r[0]/1000, r[1]/1000, r[2]/1000)))
 
 
+
+        ########################sat############################
+        # # Load the CSV file
         file_path = 'data\satellite_position.csv'
-        self.clean_file(file_path)  # Remove non-breaking spaces from the CSV file
+        # self.clean_file(file_path)  # Remove non-breaking spaces from the CSV file
 
 
-        try:
-            data = pd.read_csv(file_path, encoding='utf-8', on_bad_lines='skip')
-        except UnicodeDecodeError:
-            data = pd.read_csv(file_path, encoding='ISO-8859-1', on_bad_lines='skip')
+        # try:
+        #     data = pd.read_csv(file_path, encoding='utf-8', on_bad_lines='skip')
+        # except UnicodeDecodeError:
+        #     data = pd.read_csv(file_path, encoding='ISO-8859-1', on_bad_lines='skip')
 
 
-        norad_ids = data['NORAD Number']
+        # norad_ids = data['NORAD Number']
 
-        satellites = [Sat(norad_id) for norad_id in norad_ids]
-        for satellite in satellites:
-            print (satellite.get_position_cartesian())
-            add(Cube(app, pos=(satellite.get_position_cartesian())))
+        # satellites = [Sat(norad_id) for norad_id in norad_ids]
+        # for satellite in satellites:
+        #     print (satellite.get_position_cartesian())
+        #     add(Cube(app, pos=(satellite.get_position_cartesian())))
 
 
         # for norad_id in norad_ids:
         #     satellite = EarthSatellite(get_satellite_tle(norad_id), NORAD_id)
         #     current_position = get_current_position(satellite)
         #     add(Cube(app, pos=(current_position['longitude'], current_position['latitude'], current_position['altitude_km'])))
+
+
+
+
+
+
+
+
+
+        # Load the CSV file
+        # file_path = 'path_to_your_file/UCS-Satellite-Database-1-1-2023.csv'
+        satellite_data = pd.read_csv(file_path, encoding='latin1')
+
+        # Select a sample satellite (e.g., the first row with complete data)
+        satellite_data = satellite_data.dropna(subset=['Perigee (km)', 'Apogee (km)', 'Eccentricity', 'Inclination (degrees)'])
+
+        # Create and calculate coordinates for all satellites
+        satellites = []
+        for index, row in satellite_data.iterrows():
+            sat = Satel(
+                name=row['Name of Satellite or Alternate Names'],
+                perigee_km=row['Perigee (km)'],
+                apogee_km=row['Apogee (km)'],
+                eccentricity=row['Eccentricity'],
+                inclination_deg=row['Inclination (degrees)']
+            )
+            satellites.append(sat)
+
+        # Print the results for all satellites
+        for sat in satellites:
+            print(sat)
+            print('-' * 50)
 
         add(Earth(app, pos=(0, 0, 0)))
 
